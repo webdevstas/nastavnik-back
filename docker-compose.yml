@@ -4,7 +4,25 @@ services:
     image: postgres:13.3
     environment:
       POSTGRES_DB: "nastavnik"
-      POSTGRES_USER: "postgress"
+      POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "password"
     ports:
-      - "5442:5432"
+      - "5432:5432"
+    volumes:
+      - ./configs/db:/docker-entrypoint-initdb.d
+      - ~/postgres-data:/var/lib/postgresql/data
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    container_name: 'app'
+  nginx:
+    container_name: 'nginx'
+    image: nginx
+    volumes:
+      - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '80:80'
+      - '443:443'
+    links: 
+      - app
