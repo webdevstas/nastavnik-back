@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Student } from './entities/student.entity';
@@ -8,7 +7,7 @@ import { Student } from './entities/student.entity';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'postgres',
-    host: 'localhost',
+    host: 'postgres',
     port: 5432,
     username: 'postgres',
     password: 'password',

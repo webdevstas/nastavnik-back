@@ -1,1 +1,1 @@
-CREATE DATABASE nastavnik;
+CREATE DATABASE IF NOT EXISTS nastavnik;

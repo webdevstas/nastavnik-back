@@ -16,6 +16,8 @@ services:
     ports:
       - "3000:3000"
     container_name: 'app'
+    links:
+      - postgres
   nginx:
     container_name: 'nginx'
     image: nginx
