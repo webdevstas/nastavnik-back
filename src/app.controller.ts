@@ -26,8 +26,8 @@ export class AppController {
   }
 
   @Get('make-vote')
-  async makeGetVote(@Res({ passthrough: true }) res: Response, @Param('id') id: string) {
+  async makeGetVote(@Res({ passthrough: true }) res: Response, @Param('id') id: number) {
     res.cookie('vote', 'true');
-    return await this.appService.makeVote(+id);
+    return await this.appService.makeVote(id);
   }
 }
