@@ -778,15 +778,8 @@
 
 
             async function makeDesition(personId) {
-                const url = 'https://api.nastavnik5.ru/votes'
-                const res = await fetch({
-                    method: 'POST',
-                    url,
-                    body: JSON.stringify({ id: personId }),
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    }
-                }).then(async (res) => {
+                const url = `https://api.nastavnik5.ru/votes/make-vote?id=${personId}`
+                const res = await fetch(url).then(async (res) => {
                     await updateVotes()
                     return await res.json()
                 })
