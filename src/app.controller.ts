@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Student } from './entities/student.entity';
+import { Response } from 'express';
 
 @Controller('votes')
 export class AppController {
@@ -25,7 +26,7 @@ export class AppController {
   }
 
   @Get('make-vote')
-  async makeGetVote(@Res({ passthrough: true }) res: Response,@Param('id') id: number) {
+  async makeGetVote(@Res({ passthrough: true }) res: Response, @Param('id') id: number) {
     res.cookie('vote', 'true');
     return await this.appService.makeVote(id);
   }
