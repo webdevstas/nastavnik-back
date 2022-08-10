@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="rec474005143" class="r" style="padding-top:150px;padding-bottom:135px; " data-animationappear="off">
+    <div id="rec474005143" class="r t-rec_pt_150 t-rec_pb_135" style="padding-top:150px;padding-bottom:135px; " data-animationappear="off">
         <div class="t776" data-show-count="">
             <div class="t776__parent mobile-two-columns t776__container_mobile-grid">
                 <div class="t776__col t-col t-col_3 t-align_left t-item t776__col_mobile-grid js-product"
@@ -782,9 +782,9 @@
                 const res = await fetch({
                     method: 'POST',
                     url,
-                    body: { id: personId },
+                    body: JSON.stringify({ id: personId }),
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json;charset=utf-8'
                     }
                 }).then(async (res) => {
                     await updateVotes()

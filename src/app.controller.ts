@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Student } from './entities/student.entity';
 
@@ -22,5 +22,11 @@ export class AppController {
   @Post()
   async makeVote(@Body() body: { id: number }) {
     return await this.appService.makeVote(body.id);
+  }
+
+  @Get('make-vote')
+  async makeGetVote(@Res({ passthrough: true }) res: Response,@Param('id') id: number) {
+    res.cookie('vote', 'true');
+    return await this.appService.makeVote(id);
   }
 }
