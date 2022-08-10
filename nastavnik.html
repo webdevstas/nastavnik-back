@@ -778,7 +778,7 @@
 
 
             async function makeDesition(personId) {
-                const url = 'https://185.182.111.184/votes'
+                const url = 'https://api.nastavnik5.ru/votes'
                 const res = await fetch({
                     method: 'POST',
                     url,
@@ -795,7 +795,7 @@
             }
 
             async function updateVotes() {
-                const url = 'https://185.182.111.184/votes'
+                const url = 'https://api.nastavnik5.ru/votes'
                 const votes = await fetch(url).then(async (res) => await res.json())
                 renderVotes(votes.map((vote) => vote.votesNumber))
             }
