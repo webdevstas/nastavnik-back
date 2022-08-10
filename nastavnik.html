@@ -512,17 +512,14 @@
                         </div>
                     </div>
                     <div class="t776__btn-wrapper t1002__btns-wrapper  ">
-                        <a href="#13" class="t776__btn t776__btn_second t-btn t-btn_sm"
-                            style="color:#f96e94;border:1px solid #f96e94;border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;font-family:SpirinaFont;font-weight:600;"
+                        <a href="#13" class="t776__btn t776__btn_second"
+                            style="color:#f96e94;border:1px solid #f96e94;border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;font-family:SpirinaFont;font-weight:600; height: 100%; padding: 10px;"
                             role="button" aria-haspopup="dialog">
-                            <table style="width:100%; height:100%;">
-                                <tbody>
-                                    <tr>
-                                        <td>История</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            История
                         </a>
+                        <a href="javascript:void(0)" onclick="makeDesition(13)" class="golos-btn"
+                            style="color:#f96e94;border:1px solid #f96e94;border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;font-family:SpirinaFont;font-weight:600; height: 100%; padding: 10px;">
+                            Проголосовать</a>
                     </div>
                 </div>
                 <div class="t776__col t-col t-col_3 t-align_left t-item t776__col_mobile-grid js-product"
@@ -779,8 +776,18 @@
 
             async function makeDesition(personId) {
                 const url = `https://api.nastavnik5.ru/votes/make-vote?id=${personId}`
+                const cookieData = 'vote=true'
+                const cookies = document.cookie.split('; ')
+                const myCookieExists = cookies.includes(cookieData)
+
+                if (myCookieExists) {
+                    alert('Вы уже проголосовали')
+                    return
+                }
+                
                 const res = await fetch(url).then(async (res) => {
                     await updateVotes()
+                    document.cookie = cookieData
                     return await res.json()
                 })
 
@@ -790,14 +797,14 @@
             async function updateVotes() {
                 const url = 'https://api.nastavnik5.ru/votes'
                 const votes = await fetch(url).then(async (res) => await res.json())
-                renderVotes(votes.map((vote) => vote.votesNumber))
+                renderVotes(votes)
             }
 
             function renderVotes(votes) {
-                votes.forEach((res, i) => {
-                    const id = `vote_result-${i + 1}`
+                votes.forEach((res) => {
+                    const id = `vote_result-${res.id}`
                     const el = document.getElementById(id)
-                    el.innerText = res
+                    el.innerText = res.votesNumber
                 })
             }
 
@@ -814,6 +821,43 @@
 
             #rec474005143 .t-slds__bullet:hover .t-slds__bullet_body {
                 background-color: #222 !important;
+            }
+            .t776__parent {
+                display: table;
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+                max-width: 1200px;
+                padding: 0;
+            }
+            .t776__bgimg {
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 2;
+                -webkit-transition: opacity 0.1s linear;
+                transition: opacity 0.1s linear;
+            }
+            .t776__imgwrapper {
+                position: relative;
+                width: 100%;
+                margin-bottom: 20px;
+                padding-bottom: 110%;
+            }
+            .t776__col.t-col.t-col_3.t-align_left.t-item.t776__col_mobile-grid.js-product {
+                margin-bottom: 40px;
+            }
+            .t776__textwrapper {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            a.t776__btn.t776__btn_second {
+                margin-right: 5px;
             }
         </style>
     </div>
