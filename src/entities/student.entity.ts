@@ -14,4 +14,10 @@ export class Student {
 
     @Column({nullable: false, default: 0})
     votesNumber: number;
+
+    @Column({nullable: true})
+    imgSrc: string;
+
+    @Column({nullable: true})
+    income: number;
 }
