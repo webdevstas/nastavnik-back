@@ -27,7 +27,7 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 .npmrc
-packege-lock.json
+package-lock.json
 
 # IDE - VSCode
 .vscode/*
