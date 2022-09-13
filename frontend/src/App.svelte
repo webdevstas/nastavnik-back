@@ -25,11 +25,12 @@
 </script>
 
 <main>
-    {#each votes as vote}
-        <Card imgSrc="{vote.imgSrc}" name={getFullName(vote)} votes={vote.votes} income={vote.income}
-              on:open-modal={openModal}/>
-    {/each}
-
+    <div class="cards-container">
+        {#each votes as vote}
+            <Card imgSrc="{vote.imgSrc}" name={getFullName(vote)} votes={vote.votes} income={vote.income}
+                  on:open-modal={openModal}/>
+        {/each}
+    </div>
     {#if modalOpen}
         <Modal on:close-modal={closeModal}>
             <div
@@ -42,4 +43,9 @@
 </main>
 
 <style>
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
 </style>
