@@ -1,25 +1,22 @@
 <script>
     import {createEventDispatcher} from "svelte";
+    import {getFullName} from "../utils/helpers.js";
 
-    export let imgSrc;
-    export let name;
-    export let income;
-    export let votes;
-
+    export let data;
     const dispatch = createEventDispatcher();
 
-    function openModal() {
-        dispatch('open-modal')
+    function makeVote() {
+        dispatch('make-vote', data)
     }
 </script>
 
 <div class="card">
-    <div class="card-img" style="background-image: url({imgSrc})"></div>
-    <h2 class="card-name">{name}</h2>
-    <p class="card-income">{income}</p>
-    <p class="card-votes">{votes}</p>
+    <div class="card-img" style="background-image: url({data.imgSrc})"></div>
+    <h2 class="card-name">{getFullName(data)}</h2>
+    <p class="card-income">Доход: {data.income} руб.</p>
+    <p class="card-votes">Количество голосов: {data.votesNumber}</p>
     <div class="card-buttons_block">
-        <button on:click={openModal}>Открыть модалку</button>
+        <button on:click={makeVote}>Проголосовать</button>
     </div>
 </div>
 
@@ -37,5 +34,6 @@
         height: 300px;
         background-size: cover;
         border-radius: 5px;
+        background-position: center;
     }
 </style>

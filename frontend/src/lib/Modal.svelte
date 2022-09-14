@@ -20,10 +20,11 @@
         top: 50%;
         transform: translate(-50%, -50%);
         background-color: #fff;
-        /*height: 100px;*/
-        /*width: 100px;*/
+        min-height: 100px;
+        min-width: 500px;
         padding: 15px;
         z-index: 100;
+        border-radius: 5px;
     }
 
     .modal-bg {
