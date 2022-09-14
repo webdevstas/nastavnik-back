@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "password"
     ports:
-      - "5432:5432"
+      - "5532:5432"
     volumes:
       - ./configs/db:/docker-entrypoint-initdb.d
       - ~/postgres-data:/var/lib/postgresql/data
@@ -32,8 +32,3 @@ services:
       - '443:443'
     links: 
       - app
-  # certbot:
-  #   image: certbot/certbot
-  #   volumes:
-  #     - ./configs/certbot/conf:/etc/letsencrypt
-  #     - ./configs/certbot/www:/var/www/certbot

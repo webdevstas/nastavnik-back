@@ -5,6 +5,7 @@
 
     let votes = [];
     let modalOpen = false;
+    let captchaWidget;
 
     onMount(async () => {
         const res = await fetch('http://localhost:3000/votes');
@@ -16,11 +17,25 @@
     }
 
     function openModal() {
-        modalOpen = true;
+        const prom = new Promise((resolve, reject) => {
+            modalOpen = true;
+            resolve();
+        });
+        prom.then(renderCaptcha);
     }
 
     function closeModal() {
         modalOpen = false;
+    }
+
+    function renderCaptcha() {
+        if (window.smartCaptcha) {
+            const container = document.getElementById('captcha-container');
+            captchaWidget = window.smartCaptcha.render(container, {
+                sitekey: '',
+                hl: 'ru',
+            });
+        }
     }
 </script>
 
@@ -33,11 +48,12 @@
     </div>
     {#if modalOpen}
         <Modal on:close-modal={closeModal}>
-            <div
-                    id="captcha-container"
-                    class="smart-captcha"
-                    data-sitekey="ofrzKzQhnlCDvNgcEXpBYZjEQBJJC1jiLZh5Ykeu"
-            ></div>
+            <form action="">
+                <div
+                        id="captcha-container"
+                        class="smart-captcha"
+                ></div>
+            </form>
         </Modal>
     {/if}
 </main>
