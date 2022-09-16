@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Student } from './entities/student.entity';
-import { Response } from 'express';
+import {RealIP} from "nestjs-real-ip";
 
 @Controller('votes')
 export class AppController {
@@ -21,13 +21,7 @@ export class AppController {
   }
 
   @Post()
-  async makeVote(@Body() body: { id: number }) {
-    return await this.appService.makeVote(body.id);
-  }
-
-  @Get('make-vote')
-  async makeGetVote(@Res({ passthrough: true }) res: Response, @Query('id') id: number) {
-    res.cookie('vote', 'true');
-    return await this.appService.makeVote(id);
+  async makeVote(@Body() body: { id: number, token: string }, @RealIP() ip: string) {
+    return await this.appService.makeVote(body.id, body.token, ip);
   }
 }

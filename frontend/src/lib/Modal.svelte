@@ -25,6 +25,7 @@
         padding: 15px;
         z-index: 100;
         border-radius: 5px;
+        display: block;
     }
 
     .modal-bg {
