@@ -4,9 +4,10 @@
     import Modal from "./lib/Modal.svelte";
     import {getFullNameGaveCase} from "./utils/helpers.js";
     import Alert from "./lib/Alert.svelte";
+    import {config} from '../config'
 
-    const apiBaseUrl = 'http://localhost:3000';
-    const sitekey = 'ofrzKzQhnlCDvNgcEXpBYZjEQBJJC1jiLZh5Ykeu';
+    const sitekey = config.clientKey;
+    const apiBaseUrl = config.apiUrl;
 
     let votes = [];
     let modalOpen = false;
@@ -16,13 +17,14 @@
     let formVisible = false;
     let alertVisible = false;
     let captchaResult = false;
+    let captchaError;
 
     onMount(async () => {
         await fetchData();
     });
 
     async function fetchData() {
-        const res = await fetch(apiBaseUrl + '/votes');
+        const res = await fetch(config.apiUrl + '/votes');
         votes = await res.json();
     }
 
@@ -64,6 +66,11 @@
     }
 
     function makeVote(event) {
+        if (!checkAndSetCookie()) {
+            openModal();
+            showError('Вы уже голосовали');
+            return;
+        }
         const prom = new Promise((resolve) => {
             openModal();
             showForm();
@@ -73,7 +80,14 @@
         desision = event.detail;
     }
 
-    async function processDesition() {
+    function showError(msg) {
+        hideForm();
+        captchaResult = false;
+        alertVisible = true;
+        captchaError = msg;
+    }
+
+    async function processDecision() {
         const token = document.forms[0]['smart-token'].value;
         const url = apiBaseUrl + '/votes';
         const res = await fetch(url, {
@@ -84,13 +98,25 @@
             }
         });
         if (!res.ok) {
-            alertVisible = true;
+            const result = await res.json();
+            showError(result.message);
             return;
         }
         hideForm();
         await fetchData();
-        captchaResult = true
+        captchaResult = true;
         alertVisible = true;
+    }
+
+    function checkAndSetCookie() {
+        const cookieData = 'vote=true';
+        const cookies = document.cookie.split('; ');
+        const myCookieExists = cookies.includes(cookieData);
+        if (myCookieExists) {
+            return false;
+        }
+        document.cookie = `${cookieData}; max-age=31536000`;
+        return true;
     }
 </script>
 
@@ -110,7 +136,7 @@
                             class="smart-captcha"
                     ></div>
                     {#if submitBtnVisible}
-                        <button class="vote-btn" on:click={processDesition}>Проголосовать
+                        <button class="vote-btn" on:click={processDecision}>Проголосовать
                             за {getFullNameGaveCase(desision)}</button>
                     {/if}
                 </form>
@@ -122,7 +148,7 @@
                     </Alert>
                 {:else}
                     <Alert type="fail">
-                        Ошибка, попробуйте снова
+                        {captchaError}
                     </Alert>
                 {/if}
             {/if}
