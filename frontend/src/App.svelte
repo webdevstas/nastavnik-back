@@ -18,6 +18,7 @@
     let alertVisible = false;
     let captchaResult = false;
     let captchaError;
+    let isModalTransform = true;
 
     onMount(async () => {
         await fetchData();
@@ -29,6 +30,7 @@
     }
 
     function openModal() {
+        addTransform();
         modalOpen = true;
     }
 
@@ -48,25 +50,34 @@
     }
 
     function renderCaptcha() {
-        if (window.smartCaptcha) {
+        const captcha = window.smartCaptcha;
+        if (captcha) {
             const container = document.getElementById('captcha-container');
             captchaWidgetId = window.smartCaptcha.render(container, {
                 sitekey,
                 hl: 'ru',
             });
-        }
-
-        if (window.smartCaptcha) {
-            window.smartCaptcha.subscribe(captchaWidgetId, 'success', showSubmitBtn);
+            captcha.subscribe(captchaWidgetId, 'success', showSubmitBtn);
+            captcha.subscribe(captchaWidgetId, 'challenge-visible', deleteTransform);
+            captcha.subscribe(captchaWidgetId, 'challenge-hidden', addTransform);
         }
     }
 
+    function deleteTransform() {
+        isModalTransform = false;
+    }
+
+    function addTransform() {
+        isModalTransform = true;
+    }
+
     function showSubmitBtn() {
+        addTransform();
         submitBtnVisible = true;
     }
 
     function makeVote(event) {
-        if (!checkAndSetCookie()) {
+        if (!checkCookie()) {
             openModal();
             showError('Вы уже голосовали');
             return;
@@ -103,20 +114,21 @@
             return;
         }
         hideForm();
-        await fetchData();
         captchaResult = true;
         alertVisible = true;
+        await fetchData();
+        setCookie();
     }
 
-    function checkAndSetCookie() {
+    function checkCookie() {
         const cookieData = 'vote=true';
         const cookies = document.cookie.split('; ');
         const myCookieExists = cookies.includes(cookieData);
-        if (myCookieExists) {
-            return false;
-        }
-        document.cookie = `${cookieData}; max-age=31536000`;
-        return true;
+        return !myCookieExists;
+    }
+
+    function setCookie() {
+        document.cookie = `vote=true; max-age=31536000`;
     }
 </script>
 
@@ -128,7 +140,7 @@
         {/each}
     </div>
     {#if modalOpen}
-        <Modal on:close-modal={closeModal}>
+        <Modal on:close-modal={closeModal} transform="{isModalTransform}">
             {#if formVisible}
                 <form onsubmit="event.preventDefault()">
                     <div
@@ -165,5 +177,16 @@
 
     .vote-btn {
         margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .cards-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 550px) {
+        .cards-container {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

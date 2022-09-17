@@ -1,6 +1,8 @@
 <script>
     import {createEventDispatcher} from "svelte";
 
+    export let transform;
+
     const dispatch = createEventDispatcher();
 
     function closeModal() {
@@ -8,7 +10,7 @@
     }
 </script>
 
-<div class="modal">
+<div class="modal" style="{transform ? '' : 'transform: none'}">
     <slot></slot>
 </div>
 <div class="modal-bg" on:click={closeModal}></div>
@@ -35,5 +37,11 @@
         height: 100vh;
         position: fixed;
         background-color: rgba(0, 0, 0, .5);
+    }
+
+    @media (max-width: 550px) {
+        .modal {
+            min-width: 300px;
+        }
     }
 </style>

@@ -1,8 +1,8 @@
 import {HttpException, Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Connection, DataSource, Repository} from 'typeorm';
+import {Repository} from 'typeorm';
 import {Student} from './entities/student.entity';
-import {stringify} from 'querystring'
+import {stringify} from 'querystring';
 
 require('dotenv').config();
 import * as fetch from 'node-fetch' ;
