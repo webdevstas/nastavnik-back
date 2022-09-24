@@ -29,11 +29,11 @@ export class AppService {
         return await this.repo.findBy({id});
     }
 
-    async makeVote(id: number, token: string, ip: string) {
-        if (ip) {
-            await this.checkIfIpExists(ip);
+    async makeVote(id: number, token: string, headerIp: string, realIp: string) {
+        if (headerIp) {
+            await this.checkIfIpExists(headerIp);
         }
-        await this.checkCaptcha(token, ip);
+        await this.checkCaptcha(token, realIp);
         return await this.repo.increment({id}, 'votesNumber', 1);
     }
 
