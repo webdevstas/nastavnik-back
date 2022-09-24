@@ -1,12 +1,12 @@
-import {HttpException, Injectable} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
-import {Student} from './entities/student.entity';
-import {stringify} from 'querystring';
+import { HttpException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Student } from './entities/student.entity';
+import { stringify } from 'querystring';
 
 require('dotenv').config();
 import * as fetch from 'node-fetch' ;
-import {Ip} from "./entities/ip.entity";
+import { Ip } from "./entities/ip.entity";
 
 const SMARTCAPTCHA_SERVER_KEY = process.env.SMARTCAPTCHA_SERVER_KEY;
 const validateUrl = 'https://captcha-api.yandex.ru/validate?'
@@ -30,7 +30,9 @@ export class AppService {
     }
 
     async makeVote(id: number, token: string, ip: string) {
-        await this.checkIfIpExists(ip);
+        if (ip) {
+            await this.checkIfIpExists(ip);
+        }
         await this.checkCaptcha(token, ip);
         return await this.repo.increment({id}, 'votesNumber', 1);
     }

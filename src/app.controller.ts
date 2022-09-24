@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Request } from 'express'
 import { AppService } from './app.service';
 import { Student } from './entities/student.entity';
-import {RealIP} from "nestjs-real-ip";
 
 @Controller('votes')
 export class AppController {
@@ -21,7 +21,8 @@ export class AppController {
   }
 
   @Post()
-  async makeVote(@Body() body: { id: number, token: string }, @RealIP() ip: string) {
+  async makeVote(@Body() body: { id: number, token: string }, @Req() req: Request) {
+    const [ip] = req.headers['X-Real-IP'] ?? [];
     return await this.appService.makeVote(body.id, body.token, ip);
   }
 }
