@@ -29,7 +29,7 @@ services:
       - /etc/letsencrypt/live/api.nastavnik5.ru/privkey.pem:/etc/letsencrypt/live/api.nastavnik5.ru/privkey.pem
       - /etc/letsencrypt/live/vote.nastavnik5.ru/fullchain.pem:/etc/letsencrypt/live/vote.nastavnik5.ru/fullchain.pem
       - /etc/letsencrypt/live/vote.nastavnik5.ru/privkey.pem:/etc/letsencrypt/live/vote.nastavnik5.ru/privkey.pem
-      - ./frontend/dist:/root/nastavnik-back/frontend/dist
+      - ./frontend/dist:/usr/share/nginx/html
     ports:
       - '80:80'
       - '443:443'
