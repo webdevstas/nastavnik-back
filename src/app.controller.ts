@@ -24,6 +24,7 @@ export class AppController {
   @Post()
   async makeVote(@Body() body: { id: number, token: string }, @Req() req: Request, @RealIP() realIp: string) {
     const [headerIp] = req.headers['X-Real-IP'] ?? [];
+    console.log(headerIp, req.headers)
     return await this.appService.makeVote(body.id, body.token, headerIp, realIp);
   }
 }
